@@ -1,0 +1,1 @@
+Brings verses from Quran
