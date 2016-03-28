@@ -16,8 +16,6 @@
 # You should have received a copy of the GNU General Public License
 # along with QuranFinder.  If not, see <http://www.gnu.org/licenses/>.
 
-# NOTE: The author of this file is the user with nickname "CtrlC" in ##islam channel at freenode. It was published under the Public Domain.
-
 
 from supybot.test import *
 
