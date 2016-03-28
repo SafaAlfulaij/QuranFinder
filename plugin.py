@@ -31,12 +31,11 @@ except ImportError:
     # without the i18n module
     _ = lambda x: x
 
-
+API_URL = "http://quranapi.azurewebsites.net/api/verse/"
 import requests
 
 class qdata():
     def __init__(self, chapter, ayah, lang):
-        self.apiUrl = "http://quranapi.azurewebsites.net/api/verse/"
         self.supportedLangs = ("en","ar")
 
         if (chapter > 114 or chapter < 1):
@@ -48,7 +47,7 @@ class qdata():
         self.parseResponse(json)
 
     def requestData(self, chapter, ayah, lang):
-        request = requests.get(self.apiUrl, params = {"chapter":chapter,"number":ayah,"lang":lang})
+        request = requests.get(API_URL, params = {"chapter":chapter,"number":ayah,"lang":lang})
         return request.json()
 
     def parseResponse(self, json):
