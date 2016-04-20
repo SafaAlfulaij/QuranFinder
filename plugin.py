@@ -30,8 +30,8 @@ except ImportError:
     _ = lambda x: x
 
 API_URL = "http://api.globalquran.com/ayah/"#verse:ayah/quranID
-quranID = {"ar" : "quran-simple", "en" : "en.ahmedali"}
-TOKEN = "" #API key goes here, however seems we don't need this.
+quranID = {"ar" : "quran-simple", "en" : "en.hilali"}
+TOKEN = "the token" #seems we don't need this.
 
 import requests
 
@@ -46,6 +46,9 @@ class qdata():
 
         json = self.requestData(chapter,ayah, lang)
         self.parseResponse(json)
+
+        if (int(self.SurahNumber) != chapter): #If the ayah number is biger than the ayahs in the surah, the API jump to another surah.
+            raise ValueError("Invalid Ayah number.")
 
     def requestData(self, chapter, ayah, lang):
         url = API_URL + str(chapter) + ":" + str(ayah) + "/" + quranID[lang]
@@ -85,9 +88,6 @@ class QuranFinder(callbacks.Plugin):
             data = qdata(surah, ayah, lang)
         except ValueError as e:
             irc.error(str(e))
-            return
-        except IndexError as e:
-            irc.error(str(e) + " Broken api?")
             return
 
         irc.reply(str(data.SurahNumber) + "," + str(data.ayahNumber) + ": " + data.ayahText)
