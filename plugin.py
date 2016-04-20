@@ -31,7 +31,7 @@ except ImportError:
 
 API_URL = "http://api.globalquran.com/ayah/"#verse:ayah/quranID
 quranID = {"ar" : "quran-simple", "en" : "en.ahmedali"}
-TOKEN = "fb6e0e5755a4ae97aa4f28e56f038525" #seems we don't need this.
+TOKEN = "" #API key goes here, however seems we don't need this.
 
 import requests
 
