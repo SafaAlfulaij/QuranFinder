@@ -29,7 +29,10 @@ except ImportError:
     # without the i18n module
     _ = lambda x: x
 
-API_URL = "http://quranapi.azurewebsites.net/api/verse/"
+API_URL = "http://api.globalquran.com/ayah/"#verse:ayah/quranID
+quranID = {"ar" : "quran-simple", "en" : "en.ahmedali"}
+TOKEN = "fb6e0e5755a4ae97aa4f28e56f038525" #seems we don't need this.
+
 import requests
 
 class qdata():
@@ -45,13 +48,24 @@ class qdata():
         self.parseResponse(json)
 
     def requestData(self, chapter, ayah, lang):
-        request = requests.get(API_URL, params = {"chapter":chapter,"number":ayah,"lang":lang})
-        return request.json()
+        url = API_URL + str(chapter) + ":" + str(ayah) + "/" + quranID[lang]
+        request = requests.get(url)
+        json = request.json()
+
+        #the ID differs for each verse. So there is no static key to call in the main json.
+        for quran in json:
+            json = json[quran]
+            for quranVer in json: #the QuranID in the json. Here we used quranVar to avoid conflict with the quranID above.
+                json = json[quranVer]
+                for ID in json:
+                    json = json[ID]
+
+        return json
 
     def parseResponse(self, json):
-        self.verseName = json["ChapterName"]
-        self.ayahNumber = json["Id"]
-        self.ayahText = json["Text"]
+        self.SurahNumber = json["surah"]
+        self.ayahNumber = json["ayah"]
+        self.ayahText = json["verse"]
 
 
 
@@ -73,10 +87,10 @@ class QuranFinder(callbacks.Plugin):
             irc.error(str(e))
             return
         except IndexError as e:
-            irc.error(str(e) + "broken api?")
-            return 
+            irc.error(str(e) + " Broken api?")
+            return
 
-        irc.reply(data.verseName + str(data.ayahNumber) + ": " + data.ayahText)
+        irc.reply(data.SurahNumber + str(data.ayahNumber) + ": " + data.ayahText)
 
     quran = wrap(quran, ["int", "int", "text"])
 
@@ -85,4 +99,4 @@ class QuranFinder(callbacks.Plugin):
 Class = QuranFinder
 
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab textwidth=79:	
+# vim:set shiftwidth=4 softtabstop=4 expandtab textwidth=79:
