@@ -90,7 +90,7 @@ class QuranFinder(callbacks.Plugin):
             irc.error(str(e) + " Broken api?")
             return
 
-        irc.reply(data.SurahNumber + str(data.ayahNumber) + ": " + data.ayahText)
+        irc.reply(str(data.SurahNumber) + "," + str(data.ayahNumber) + ": " + data.ayahText)
 
     quran = wrap(quran, ["int", "int", "text"])
 
