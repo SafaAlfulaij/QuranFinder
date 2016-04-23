@@ -31,7 +31,7 @@ except ImportError:
 
 API_URL = "http://api.globalquran.com/ayah/"#verse:ayah/quranID
 # Set languages and translations the bot will accept
-quranID = {"ar" : "quran-simple", "en" : "en.sahih", "tr" : "tr.yazir"}
+quranID = {"ar" : "quran-simple", "en" : "en.sahih", "tr" : "tr.yazir", "fa" : "fa.fooladvand"}
 TOKEN = "the token" #seems we don't need this.
 
 import requests
@@ -41,7 +41,7 @@ class qdata():
         if (chapter > 114 or chapter < 1):
             raise ValueError("Invalid Surah number.")
         if(lang not in quranID):
-            raise ValueError("Only ar,en,tr languages are supported.")
+            raise ValueError("Only ar,en,tr,fr languages are supported.")
 
         json = self.requestData(chapter,ayah, lang)
         self.parseResponse(json)
