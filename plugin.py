@@ -41,7 +41,7 @@ class qdata():
         if (chapter > 114 or chapter < 1):
             raise ValueError("Invalid Surah number.")
         if(lang not in quranID):
-            raise ValueError("Only ar,en,tr,fr languages are supported.")
+            raise ValueError("Only ar,en,tr,fa languages are supported.")
 
         json = self.requestData(chapter,ayah, lang)
         self.parseResponse(json)
