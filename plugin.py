@@ -1,4 +1,3 @@
-
 # Copyright 2016 Safa AlFulaij <safa1996alfulaij@gmail.com>
 #
 # This file is part of QuranFinder.
@@ -15,6 +14,8 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with QuranFinder.  If not, see <http://www.gnu.org/licenses/>.
+
+# Version 0.2
 
 import supybot.utils as utils
 from supybot.commands import *
@@ -37,11 +38,16 @@ TOKEN = "the token" #seems we don't need this.
 import requests
 
 class qdata():
-    def __init__(self, chapter, ayah, lang):	
+    def __init__(self, chapter, ayah, lang):
+        if(lang == None):
+            lang = "en"
+        if(len(lang) == 2):
+            if(lang not in quranID):
+                raise ValueError("Only " + " ,".join(quranID) + " languages are supported. Maybe you would like to use a translation/tafsir code instead.")
+            lang = quranID[lang]
+
         if (chapter > 114 or chapter < 1):
             raise ValueError("Invalid Surah number.")
-        if(lang not in quranID):
-            raise ValueError("Only ar,en,tr,fa languages are supported.")
 
         json = self.requestData(chapter,ayah, lang)
         self.parseResponse(json)
@@ -50,7 +56,7 @@ class qdata():
             raise ValueError("Invalid Ayah number.")
 
     def requestData(self, chapter, ayah, lang):
-        url = API_URL + str(chapter) + ":" + str(ayah) + "/" + quranID[lang]
+        url = API_URL + str(chapter) + ":" + str(ayah) + "/" + lang
         request = requests.get(url)
         json = request.json()
 
@@ -81,17 +87,23 @@ class QuranFinder(callbacks.Plugin):
     def quran(self, irc, msg, args, surah, ayah, lang):
         """<surah> <ayah> <lang>
 
-        returns ayah number <ayah> of surah number <surah> in <lang> language.
+        returns ayah number <ayah> of surah number <surah> in <lang> language or translation or tafsir.
         """
+
         try:
             data = qdata(surah, ayah, lang)
         except ValueError as e:
             irc.error(str(e))
             return
+        except (KeyError, TypeError) as e: #TypeError incase requesting a audio version. The json would contain a list so qdata would raise a TypeError
+            irc.error("Wrong translation code or broken API.") 
+            return
+         
+
 
         irc.reply(str(data.SurahNumber) + "," + str(data.ayahNumber) + ": " + data.ayahText)
 
-    quran = wrap(quran, ["int", "int", "text"])
+    quran = wrap(quran, ["int", "int", optional("something")])
 
 
 
