@@ -1,5 +1,10 @@
 #Change Log
 
+Version 0.4 - (30 Apri 2016)
+==========
+ - English is the default. No need to write `en`.
+ - Support for <lang>.<translation> so now you can most of the API data. (e.g: ar.jalalayn, en.hilali) from http://api.globalquran.com/quran
+
 Version 0.3 - (21 Apri 2016)
 ==========
  - Added Turkish language translation
