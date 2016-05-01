@@ -1,5 +1,11 @@
 #Change Log
 
+
+Version 0.4.1 - (1 May 2016)
+==========
+ - Added links to Wiki in Bot messages for help (e.g: API_codes).
+ - Enabled Token again.
+
 Version 0.4 - (30 Apri 2016)
 ==========
  - English is the default. No need to write `en`.
