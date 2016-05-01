@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with QuranFinder.  If not, see <http://www.gnu.org/licenses/>.
 
-# Version 0.2
+# Version 0.4.1
 
 import supybot.utils as utils
 from supybot.commands import *
