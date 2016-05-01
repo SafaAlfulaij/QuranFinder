@@ -43,7 +43,7 @@ class qdata():
             lang = "en"
         if(len(lang) == 2):
             if(lang not in quranID):
-                raise ValueError("Only " + " ,".join(quranID) + " languages are supported. Maybe you would like to use a translation/tafsir code instead.")
+                raise ValueError("Only " + " ,".join(quranID) + " languages are supported using two letters code. Maybe you would like to use a translation/tafsir code instead, Check: https://git.io/vwMz4 for a list of avalible sources.")
             lang = quranID[lang]
 
         if (chapter > 114 or chapter < 1):
@@ -87,7 +87,7 @@ class QuranFinder(callbacks.Plugin):
     def quran(self, irc, msg, args, surah, ayah, lang):
         """<surah> <ayah> <lang>
 
-        returns ayah number <ayah> of surah number <surah> in <lang> language or translation or tafsir.
+        returns ayah number <ayah> of surah number <surah> in <lang> language or translation or tafsir. for more information visit: https://git.io/vwMz9
         """
 
         try:
