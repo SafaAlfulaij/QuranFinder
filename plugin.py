@@ -33,8 +33,8 @@ except ImportError:
 API_URL = "http://api.globalquran.com/ayah/"#verse:ayah/quranID
 # Set languages and translations the bot will accept
 quranID = {"ar" : "quran-simple", "en" : "en.sahih", "tr" : "tr.yazir", "fa" : "fa.fooladvand"}
-# Token obtained from http://docs.globalquran.com
-TOKEN = "the token" #seems we don't need this.
+
+TOKEN = "the token" # Token obtained from http://docs.globalquran.com
 
 import requests
 
