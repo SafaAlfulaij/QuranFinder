@@ -33,6 +33,7 @@ except ImportError:
 API_URL = "http://api.globalquran.com/ayah/"#verse:ayah/quranID
 # Set languages and translations the bot will accept
 quranID = {"ar" : "quran-simple", "en" : "en.sahih", "tr" : "tr.yazir", "fa" : "fa.fooladvand"}
+# Token obtained from http://docs.globalquran.com
 TOKEN = "the token" #seems we don't need this.
 
 import requests
@@ -57,7 +58,7 @@ class qdata():
 
     def requestData(self, chapter, ayah, lang):
         url = API_URL + str(chapter) + ":" + str(ayah) + "/" + lang
-        request = requests.get(url)
+        request = requests.get(url, params = {'key' : TOKEN})
         json = request.json()
 
         #the ID differs for each verse. So there is no static key to call in the main json.
