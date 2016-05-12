@@ -99,10 +99,16 @@ class QuranFinder(callbacks.Plugin):
         except (KeyError, TypeError) as e: #TypeError incase requesting a audio version. The json would contain a list so qdata would raise a TypeError
             irc.error("Wrong translation code or broken API.") 
             return
-         
 
-
-        irc.reply(str(data.SurahNumber) + "," + str(data.ayahNumber) + ": " + data.ayahText)
+        if self.registryValue('splitMessages'):
+            ircMsgBytes = (str(data.SurahNumber) + "," + str(data.ayahNumber) + ": " + data.ayahText).encode('utf-8')
+            while len(ircMsgBytes) > 350:
+                splitPoint = ircMsgBytes[0:351].rfind(' '.encode('utf-8'))
+                irc.reply(ircMsgBytes[0:splitPoint].decode('utf-8').strip())
+                ircMsgBytes = ircMsgBytes[splitPoint:]
+            irc.reply(ircMsgBytes.decode('utf-8').strip())
+        else:
+            irc.reply(str(data.SurahNumber) + "," + str(data.ayahNumber) + ": " + data.ayahText)
 
     quran = wrap(quran, ["int", "int", optional("something")])
 
