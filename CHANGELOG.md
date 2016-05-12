@@ -1,5 +1,11 @@
 #Change Log
 
+Version 0.4.2 - (12 May 2016)
+==========
+ - Workaround to avoid non-latin text getting omitted [Limnoria bug 1232] (https://github.com/ProgVal/Limnoria/issues/1232)
+ - Info about the implemented support for API keys were added to Readme file.
+ - Removed version line from plugin.py file to avoid double changing when accepting a pull request.
+
 
 Version 0.4.1 - (1 May 2016)
 ==========
