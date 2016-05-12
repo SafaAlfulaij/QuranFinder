@@ -34,13 +34,16 @@ def configure(advanced):
     # user or not.  You should effect your configuration by manipulating the
     # registry as appropriate.
     from supybot.questions import expect, anything, something, yn
-    conf.registerPlugin('QuranFinder', True)
-
+    QuranFinder = conf.registerPlugin('QuranFinder', True)
+    if yn("""Split long verses?""", default=True):
+        QuranFinder.splitMessages.setValue(True)
+    else:
+        QuranFinder.splitMessages.setValue(False)
 
 QuranFinder = conf.registerPlugin('QuranFinder')
 # This is where your configuration variables (if any) should go.  For example:
-# conf.registerGlobalValue(QuranFinder, 'someConfigVariableName',
-#     registry.Boolean(False, _("""Help for someConfigVariableName.""")))
+conf.registerGlobalValue(QuranFinder, 'splitMessages',
+    registry.Boolean(True, _("""Set to split long verses.""")))
 
 
 # vim:set shiftwidth=4 tabstop=4 expandtab textwidth=79:
