@@ -20,5 +20,11 @@ Returns
 Al-Fatiha1: Praise be to Allah, Lord of the Worlds,
 ```
 
-Currently you can use en (English) or ar (Arabic).
+The bot can obtain translation of the Quran for different languages. (ar, en, fa, tr) are the main ones. You can get extra translations and other data sources by using the data source key provided by Global Quran API. For more information see the [wiki] (https://github.com/SafaAlfulaij/QuranFinder/wiki)
+
+One example is:
+```
+!quran 1 1 en.hilali
+```
+which will provide the Hilali English translation of the Quran.
 
