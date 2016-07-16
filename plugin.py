@@ -98,10 +98,11 @@ class QuranFinder(callbacks.Plugin):
             irc.error("Wrong translation code or broken API.") 
             return
 
+        ircMsgLen = self.registryValue('splitMessagesAt')
         if self.registryValue('splitMessages'):
             ircMsgBytes = (str(data.SurahNumber) + "," + str(data.ayahNumber) + ": " + data.ayahText).encode('utf-8')
-            while len(ircMsgBytes) > 350:
-                splitPoint = ircMsgBytes[0:351].rfind(' '.encode('utf-8'))
+            while len(ircMsgBytes) > ircMsgLen:
+                splitPoint = ircMsgBytes[0:ircMsgLen + 1].rfind(' '.encode('utf-8'))
                 irc.reply(ircMsgBytes[0:splitPoint].decode('utf-8').strip())
                 ircMsgBytes = ircMsgBytes[splitPoint:]
             irc.reply(ircMsgBytes.decode('utf-8').strip())
