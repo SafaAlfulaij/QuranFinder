@@ -30,7 +30,12 @@ except ImportError:
 
 API_URL = "http://api.globalquran.com/ayah/"#verse:ayah/quranID
 # Set languages and translations the bot will accept
-quranID = {"ar" : "quran-simple", "en" : "en.sahih", "tr" : "tr.yazir", "fa" : "fa.fooladvand"}
+quranID = {
+    "ar" : "quran-simple",
+    "en" : "en.sahih",
+    "tr" : "tr.yazir",
+    "fa" : "fa.fooladvand"
+}
 
 TOKEN = "the token" # Token obtained from http://docs.globalquran.com
 
@@ -42,7 +47,10 @@ class qdata():
             lang = "en"
         if(len(lang) == 2):
             if(lang not in quranID):
-                raise ValueError("Only " + " ,".join(quranID) + " languages are supported using two letters code. Maybe you would like to use a translation/tafsir code instead, Check: https://git.io/vwMz4 for a list of avalible sources.")
+                raise ValueError("Only " + " ,".join(quranID) + " languages " + 
+                    "are supported using two letters code. Maybe you would " + 
+                    "like to use a translation/tafsir code instead, Check: " + 
+                    "https://git.io/vwMz4 for a list of avalible sources.")
             lang = quranID[lang]
 
         if (chapter > 114 or chapter < 1):
@@ -51,7 +59,9 @@ class qdata():
         json = self.requestData(chapter,ayah, lang)
         self.parseResponse(json)
 
-        if (int(self.SurahNumber) != chapter): #If the ayah number is biger than the ayahs in the surah, the API jump to another surah.
+        if (int(self.SurahNumber) != chapter):
+        #If the ayah number is biger than the ayahs in the surah,
+        # the API jump to another surah.
             raise ValueError("Invalid Ayah number.")
 
     def requestData(self, chapter, ayah, lang):
@@ -59,10 +69,13 @@ class qdata():
         request = requests.get(url, params = {'key' : TOKEN})
         json = request.json()
 
-        #the ID differs for each verse. So there is no static key to call in the main json.
+        #the ID differs for each verse. So there is no static key to call in
+        # the main json.
         for quran in json:
             json = json[quran]
-            for quranVer in json: #the QuranID in the json. Here we used quranVar to avoid conflict with the quranID above.
+            for quranVer in json:
+                #the QuranID in the json. Here we used quranVar to avoid
+                # conflict with the quranID above.
                 json = json[quranVer]
                 for ID in json:
                     json = json[ID]
@@ -88,32 +101,88 @@ class QuranFinder(callbacks.Plugin):
 
         returns ayah number <ayah> of surah number <surah> in <lang> language or translation or tafsir. for more information visit: https://git.io/vwMz9
         """
-
-        try:
-            data = qdata(surah, ayah, lang)
-        except ValueError as e:
-            irc.error(str(e))
+  
+        if ayah.isdigit():
+            data = qdatae(surah, int(ayah), lang)
+            if type(data) == str:
+                irc.reply(data)
+                return
+            else:
+                if self.registryValue('splitMessages'):
+                    ircMsgBytes = (str(data.SurahNumber) + "," + str(data.ayahNumber) +
+                        ": " + data.ayahText).encode('utf-8')
+                    splited_msg_bytes = split_irc_msg(ircMsgBytes)
+                    for m in splited_msg_bytes:
+                        irc.reply(m)
+                else:
+                    irc.reply(str(data.SurahNumber) + "," + str(data.ayahNumber) + ": "
+                        + data.ayahText)
             return
-        except (KeyError, TypeError) as e: #TypeError incase requesting a audio version. The json would contain a list so qdata would raise a TypeError
-            irc.error("Wrong translation code or broken API.") 
+
+        ayahs = _2nd_form(ayah)
+        if not ayahs:
+            irc.reply("Error! Not a valid format") #TODO: replace with better msg
             return
 
-        ircMsgLen = self.registryValue('splitMessagesAt')
-        if self.registryValue('splitMessages'):
-            ircMsgBytes = (str(data.SurahNumber) + "," + str(data.ayahNumber) + ": " + data.ayahText).encode('utf-8')
-            while len(ircMsgBytes) > ircMsgLen:
-                splitPoint = ircMsgBytes[0:ircMsgLen + 1].rfind(' '.encode('utf-8'))
-                irc.reply(ircMsgBytes[0:splitPoint].decode('utf-8').strip())
-                ircMsgBytes = ircMsgBytes[splitPoint:]
-            irc.reply(ircMsgBytes.decode('utf-8').strip())
-        else:
-            irc.reply(str(data.SurahNumber) + "," + str(data.ayahNumber) + ": " + data.ayahText)
+        for a in range(ayahs[0], ayahs[1] + 1):
+            #TODO: better variable name(a)
+            data = qdatae(surah, a, lang)
+            if type(data) == str:
+                irc.reply(data)
+            else:
+                if self.registryValue('splitMessages'):
+                    ircMsgBytes = (str(data.SurahNumber) + "," + str(data.ayahNumber) +
+                        ": " + data.ayahText).encode('utf-8')
+                    splited_msg_bytes = split_irc_msg(ircMsgBytes)
+                    for m in splited_msg_bytes:
+                        #TODO: better variable name
+                        irc.reply(m)
+                else:
+                    irc.reply(str(data.SurahNumber) + "," + str(data.ayahNumber) + ": "
+                        + data.ayahText)
 
-    quran = wrap(quran, ["int", "int", optional("something")])
+       
+       
+    quran = wrap(quran, ["int", "str", optional("something")])
 
 
 
 Class = QuranFinder
+
+def split_irc_msg(MessageBytes):
+    splited_msg = []
+    while len(ircMsgBytes) > 350:
+        splitPoint = MessageBytes[0:351].rfind(' '.encode('utf-8'))
+        splited_msg.extend([MessageBytes[0:splitPoint].decode('utf-8').strip()])
+        MessageBytes = MessageBytes[splitPoint:]
+   splited_msg.extend([MessageBytes[:]]
+   return splited_msg
+
+def qdatae(surah, ayah, lang):
+    #TODO: give me a better name
+    try:
+        return qdata(surah, ayah, lang)
+    except ValueError as e:
+            return str(e)
+    except (KeyError, TypeError) as e:
+        #TypeError incase requesting a audio version. The json would
+        # contain a list so qdata would raise a TypeError
+        return "Wrong translation code or broken API."
+
+def _2nd_form(ayah):
+    #TODO: give me a better name
+    ayah = ayah.split('-')
+    if len(ayah) != 2:
+        return 0
+    elif not (ayah[0].isdigit() and ayah[1].isdigit()):
+        return 0
+
+    diff =  int(ayah[1]) - int(ayah[0]) 
+    if (diff > 5) or (diff  < 1):
+        return 0
+    
+    return [int(ayah[0]), int(ayah[1])]
+
 
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab textwidth=79:
