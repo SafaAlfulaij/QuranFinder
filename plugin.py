@@ -161,7 +161,7 @@ def split_irc_msg(MessageBytes):
 def qdatae(surah, ayah, lang):
     #TODO: give me a better name
     try:
-        data = qdata(surah, ayah, lang)
+        return qdata(surah, ayah, lang)
     except ValueError as e:
             return str(e)
     except (KeyError, TypeError) as e:
