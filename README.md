@@ -28,3 +28,8 @@ One example is:
 ```
 which will provide the Hilali English translation of the Quran.
 
+## License
+This program is free software under GNU General Public License 3 or any later version and COMES WITHOUT AND WARRANTY, for more information see LICENSE.
+
+## To-Do
+- [ ] Don't send a message for each ayah and split messages, instead use supybot's more
