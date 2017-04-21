@@ -44,6 +44,8 @@ QuranFinder = conf.registerPlugin('QuranFinder')
 # This is where your configuration variables (if any) should go.  For example:
 conf.registerGlobalValue(QuranFinder, 'splitMessages',
     registry.Boolean(True, _("""Set to split long verses.""")))
+conf.registerGlobalValue(QuranFinder, 'splitMessagesAt',
+    registry.PositiveInteger(350, _("""Set where to split long verses.""")))
 
 
 # vim:set shiftwidth=4 tabstop=4 expandtab textwidth=79:
