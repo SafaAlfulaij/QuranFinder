@@ -17,10 +17,10 @@ returns ayah number <ayah> of surah number <surah> in <lang> language.
 ```
 Returns 
 ```
-Al-Fatiha1: Praise be to Allah, Lord of the Worlds,
+1,1: Praise be to Allah, Lord of the Worlds,
 ```
 
-The bot can obtain translation of the Quran for different languages. (ar, en, fa, tr) are the main ones. You can get extra translations and other data sources by using the data source key provided by Global Quran API. For more information see the [wiki] (https://github.com/SafaAlfulaij/QuranFinder/wiki)
+The bot can obtain translation of the Quran for different languages. (ar, en, fa, tr) are the main ones. You can get extra translations and other data sources by using the data source key provided by Global Quran API. For more information see the [Wiki](https://github.com/SafaAlfulaij/QuranFinder/wiki)
 
 One example is:
 ```
@@ -28,3 +28,8 @@ One example is:
 ```
 which will provide the Hilali English translation of the Quran.
 
+## License
+This program is free software under GNU General Public License 3 or any later version and COMES WITHOUT AND WARRANTY, for more information see LICENSE.
+
+## To-Do
+- [ ] Don't send a message for each ayah and split messages, instead use supybot's more
