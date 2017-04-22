@@ -10,7 +10,7 @@ How to Use:
 ```
 !quran <surah> <ayah> <lang>
 ```
-returns ayah number <ayah> of surah number <surah> in <lang> language.
+returns ayah number \<ayah\> of surah number \<surah\> in \<lang\> language.
 
 ```
 !quran 1 1 en
@@ -27,6 +27,8 @@ One example is:
 !quran 1 1 en.hilali
 ```
 which will provide the Hilali English translation of the Quran.
+
+_NOTE: the '!' character is just prefix command character of the bot and may be different depending how the bot was configured_
 
 ## License
 This program is free software under GNU General Public License 3 or any later version and COMES WITHOUT AND WARRANTY, for more information see LICENSE.
