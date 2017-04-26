@@ -35,3 +35,4 @@ This program is free software under GNU General Public License 3 or any later ve
 
 ## To-Do
 - [ ] Don't send a message for each ayah and split messages, instead use supybot's more
+- [ ] Use config.py for the maximum difference between two verses(by default) it is 5
