@@ -76,13 +76,14 @@ class qdata():
         self.ayahText = json["verse"]
 class utilities():
     def arg2list(ayat): # TODO: better name for this function
+        MAX_DIFF = 5
         try:
             return [int(ayat)]
         except ValueError:
             t = ayat.split('-') 
             start, end = int(t[0]), int(t[1])
-            if (end - start) not in range(1, 6):
-                raise ValueError("Out of range(max is 5) or start ayah is" +
+            if (end - start) not in range(1, MAX_DIFF + 1):
+                raise ValueError("Out of range(maximum is 5) or start ayah is" +
                 " bigger than end ayah.") #TODO: a better message please
             else:
                 return list(range(start, end + 1))
