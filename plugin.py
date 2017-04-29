@@ -76,16 +76,15 @@ class qdata():
         self.ayahText = json["verse"]
 class utilities():
     def arg2list(ayat): # TODO: better name for this function
-        MAX_DIFF = 5 # This is the maximum difference between two verses number, or 
-                     # how many ayat user can get with a single command at most?
+        MAX_DIFF = 5
         try:
             return [int(ayat)]
         except ValueError:
             t = ayat.split('-') 
             start, end = int(t[0]), int(t[1])
             if (end - start) not in range(1, MAX_DIFF + 1):
-                raise ValueError("Out of range(max is 5) or start ayah is" +
-                "bigger than end ayah.") #TODO: a better message please
+                raise ValueError("Out of range(maximum is 5) or start ayah is" +
+                " bigger than end ayah.") #TODO: a better message please
             else:
                 return list(range(start, end + 1))
             
@@ -108,26 +107,24 @@ class QuranFinder(callbacks.Plugin):
             list_of_ayat = utilities.arg2list(ayat)
         except ValueError as e:
             irc.error(str(e))
+            return
 
         try:
-            ayat_str = ''
+            ayat_list = []
             for ayah in list_of_ayat:
                 data = qdata(surah, ayah, lang)
-                ayat_str += str(data.SurahNumber)
-                ayat_str += str(data.ayahNumber)
-                ayat_str += str(data.ayahText)
-                ayat_str += '\n'
+                ayat_list.extend([str(data.SurahNumber) + ":" + str(data.ayahNumber)
+                           + ", " + str(data.ayahText)])
         except ValueError as e:
             irc.error(str(e))
             return
         except (KeyError, TypeError) as e: #TypeError incase requesting a audio version. The json would contain a list so qdata would raise a TypeError
             irc.error("Wrong translation code or broken API.") 
             return
-        
-        for ayah in ayat_str.split('\n'):
+        for ayah in ayat_list:
 
             if self.registryValue('splitMessages'):
-                ircMsgBytes = (ayah).encode('utf-8')
+                ircMsgBytes = ayah.encode('utf-8')
                 while len(ircMsgBytes) > 350:
                     splitPoint = ircMsgBytes[0:351].rfind(' '.encode('utf-8'))
                     irc.reply(ircMsgBytes[0:splitPoint].decode('utf-8').strip())
